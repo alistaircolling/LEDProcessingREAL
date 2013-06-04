@@ -57,8 +57,8 @@ public class MatrixEQApp extends BaseSwingFrameApp {
 	int eqPos[];
 
 	// --- added for matrix
-	int MATRIX_COLS = 20;
-	int MATRIX_ROWS = 10;
+	int MATRIX_COLS = 40;
+	int MATRIX_ROWS = 25;
 	LEDMatrix matrix;
 
 	void loadDefaultMatrix() {
@@ -157,7 +157,7 @@ public class MatrixEQApp extends BaseSwingFrameApp {
 	void setupExtraWindow() {
 		//win = new ExtraWindow(proc, "Matrix Setup", 0, 0, 500, 300);
 		win = new MyExtraWindow(proc, "Matrix Setup", 500, 300);
-		win.setVisible(false);
+		//win.setVisible(false);
 		
 		matrixSetup();
 	}
@@ -374,7 +374,10 @@ public class MatrixEQApp extends BaseSwingFrameApp {
 
 	class EQTask extends TimerTask {
 		public void run() {
-			while (true) {
+		while(true){
+			loadFromCanvas();
+		}
+		/*	while (true) {
 
 				if (eq == null || eq.song == null) {
 					return;
@@ -390,7 +393,7 @@ public class MatrixEQApp extends BaseSwingFrameApp {
 						e.printStackTrace();
 					}
 				}
-			}
+			}*/
 			// System.out.println("Time's up!");
 			// toolkit.beep();
 			// timer.cancel(); //Not necessary because we call System.exit
