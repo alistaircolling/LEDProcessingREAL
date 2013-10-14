@@ -27,7 +27,7 @@ import javax.swing.JTextField;
 public class MatrixEQApp extends BaseSwingFrameApp {
 	Minim minim;
 	AudioPlayer song;
-	EQTask eqRunner = new EQTask();
+	LoadFromCanvasTask loadFromCanvasTask = new LoadFromCanvasTask();
 
 	Timer timer;
 
@@ -87,37 +87,11 @@ public class MatrixEQApp extends BaseSwingFrameApp {
 
 		eqPos = new int[200];
 		
-		setupEQRunner();
+		setupTimer();
 
 	}
 
-	void sweepWidth() {
-		for (int j = 0; j < matrix.cols(); j++) {
-			matrix.clear();
-			matrix.drawLine(j, 0, j, matrix.rows() - 1, 255, 255, 255);
-			matrix.refresh();
-			try {
-				Thread.sleep(200);
-			} catch (InterruptedException ex) {
-				// TODO Auto-generated catch block
-				ex.printStackTrace();
-			}
-		}
-	}
-
-	void sweepHeight() {
-		for (int j = 0; j < matrix.rows(); j++) {
-			matrix.clear();
-			matrix.drawLine(0, j, matrix.cols() - 1, j, 255, 255, 255);
-			matrix.refresh();
-			try {
-				Thread.sleep(200);
-			} catch (InterruptedException ex) {
-				// TODO Auto-generated catch block
-				ex.printStackTrace();
-			}
-		}
-	}
+	
 
 	int constrain(int theValue, int theMin, int theMax) {
 		int retVal = theValue;
@@ -287,9 +261,7 @@ public class MatrixEQApp extends BaseSwingFrameApp {
 			System.out.print("NULL");
 		} else {
 			System.out.print("ACTIVE");
-		}
-		sweepHeight();
-		sweepWidth();
+		}				
 	}
 
 	/**
@@ -299,7 +271,7 @@ public class MatrixEQApp extends BaseSwingFrameApp {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				eqRunner = null;
+				loadFromCanvasTask = null;
 
 				matrix.end();
 				timer.cancel();
@@ -366,38 +338,18 @@ public class MatrixEQApp extends BaseSwingFrameApp {
 		
 	}
 
-	void setupEQRunner() {
+	void setupTimer() {
 		timer = new Timer();
-		timer.schedule(eqRunner, 0, // initial delay
+		timer.schedule(loadFromCanvasTask, 0, // initial delay
 				100);
 	}
 
-	class EQTask extends TimerTask {
+	class LoadFromCanvasTask extends TimerTask {
 		public void run() {
 		while(true){
 			loadFromCanvas();
 		}
-		/*	while (true) {
-
-				if (eq == null || eq.song == null) {
-					return;
-				}
-				if (eq.song.isPlaying()) {
-					//matrixEQ();
-					loadFromCanvas();
-				} else {
-					try {
-						Thread.sleep(100);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-			}*/
-			// System.out.println("Time's up!");
-			// toolkit.beep();
-			// timer.cancel(); //Not necessary because we call System.exit
-			// System.exit(0); //Stops the AWT thread (and everything else)
+	
 		}
 	}
 }
