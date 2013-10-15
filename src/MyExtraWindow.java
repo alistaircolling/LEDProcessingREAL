@@ -1,9 +1,11 @@
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import processing.core.PApplet;
 import toxi.color.ColorGradient;
 import toxi.color.ColorList;
 import toxi.color.TColor;
+import toxi.geom.Vec2D;
 
 import com.hookedup.processing.ExtraWindow;
 
@@ -17,8 +19,10 @@ public class MyExtraWindow extends ExtraWindow {
 	int displayWidth = 50;
 	int currPos = 0;
 	float speed = 1;
-	TColor[] cols = new TColor[3];
+	TColor[] cols;
 	ColorGradient grad;
+	int trailLength = 20;
+	ArrayList<Vec2D> trail;
 
 	public MyExtraWindow(PApplet theApplet, String theName, int theWidth,
 			int theHeight) {
@@ -28,37 +32,72 @@ public class MyExtraWindow extends ExtraWindow {
 
 	public void setup() {
 		size(350, 300);
+		trail = new ArrayList<Vec2D>();
 		noStroke();
 		initCols();
 	}
 
 	public void draw() {
-		noStroke();
-		fill(cols[0].toARGB());
-		rect(200, 0, 50, 50);
-		fill(cols[1].toARGB());
-		rect(250, 0, 50, 50);
-		fill(cols[2].toARGB());
-		rect(300, 0, 50, 50);
+		if (cols.length>0) {
+			noStroke();
+			fill(cols[0].toARGB());
+			rect(200, 0, 50, 50);
+			fill(cols[1].toARGB());
+			rect(250, 0, 50, 50);
+			fill(cols[2].toARGB());
+			rect(300, 0, 50, 50);
 
-		// ColorList l = grad.calcGradient(currPos, displayWidth+currPos);
-		ColorList l = grad.calcGradient(0, displayWidth * 3);
-		int x = 0;
+			// ColorList l = grad.calcGradient(currPos, displayWidth+currPos);
+			ColorList l = grad.calcGradient(0, displayWidth * 3);
+			int x = 0;
 
-		for (Iterator i = l.iterator(); i.hasNext();) {
-			TColor c = (TColor) i.next();
-			stroke(c.toARGB());
-			line(x - (currPos), 0, x - currPos, height);
-			x++;
+			for (Iterator i = l.iterator(); i.hasNext();) {
+				TColor c = (TColor) i.next();
+				stroke(c.toARGB());
+				line(x - (currPos), 0, x - currPos, height);
+				x++;
 
+			}
+			if (currPos == displayWidth) {
+				currPos = 0;
+				addNewCol();
+			} else {
+				currPos++;
+			}
+			Vec2D mouseVec = new Vec2D(mouseX, mouseY);
+			if (trail.size() < trailLength) {
+				trail.add(0, mouseVec);
+			} else {
+				// remove last element
+				trail.remove(trailLength - 1);
+				trail.add(0, mouseVec);
+			}
+			drawTrail();
 		}
-		if (currPos == displayWidth) {
-			currPos = 0;
-			addNewCol();
-		} else {
-			currPos++;
+
+	}
+
+	private void drawTrail() {
+		Vec2D mouse0 = trail.get(0);
+		int oppCol = getOppCol(mouse0);		
+		stroke(oppCol);
+		ellipse(trail.get(0).x, trail.get(0).y, 3, 3);
+		for (int i = 1; i < trail.size(); i++) {
+			Vec2D vec = trail.get(i);
+			oppCol = getOppCol(vec);
+			stroke(oppCol);
+			point(vec.x, vec.y);
 		}
 
+	}
+
+	//returns opposite color for a given pixel pos
+	private int getOppCol(Vec2D mouse0) {
+		int currCol = get((int)mouse0.x,(int) mouse0.y);
+		TColor oppCol = TColor.newARGB(currCol);
+		oppCol = oppCol.getInverted();
+		int retCol = oppCol.toARGB();
+		return retCol;
 	}
 
 	public void addNewCol() {
@@ -72,6 +111,7 @@ public class MyExtraWindow extends ExtraWindow {
 	}
 
 	public void initCols() {
+		cols = new TColor[3];
 
 		cols[0] = getRanCol();
 		cols[1] = getRanCol();
@@ -86,7 +126,7 @@ public class MyExtraWindow extends ExtraWindow {
 
 	TColor getRanCol() {
 		TColor col = TColor.newRandom();
-		
+
 		return col;
 	}
 }
