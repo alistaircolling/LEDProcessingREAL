@@ -38,7 +38,7 @@ public class MyExtraWindow extends ExtraWindow {
 	}
 
 	public void draw() {
-		if (cols.length>0) {
+		if (cols.length > 0) {
 			noStroke();
 			fill(cols[0].toARGB());
 			rect(200, 0, 50, 50);
@@ -68,8 +68,10 @@ public class MyExtraWindow extends ExtraWindow {
 			if (trail.size() < trailLength) {
 				trail.add(0, mouseVec);
 			} else {
-				// remove last element
-				trail.remove(trailLength - 1);
+				if (trail.size() > 0) {
+					// remove last element
+					trail.remove(trail.size() - 1);
+				}
 				trail.add(0, mouseVec);
 			}
 			drawTrail();
@@ -79,7 +81,7 @@ public class MyExtraWindow extends ExtraWindow {
 
 	private void drawTrail() {
 		Vec2D mouse0 = trail.get(0);
-		int oppCol = getOppCol(mouse0);		
+		int oppCol = getOppCol(mouse0);
 		stroke(oppCol);
 		ellipse(trail.get(0).x, trail.get(0).y, 3, 3);
 		for (int i = 1; i < trail.size(); i++) {
@@ -91,9 +93,9 @@ public class MyExtraWindow extends ExtraWindow {
 
 	}
 
-	//returns opposite color for a given pixel pos
+	// returns opposite color for a given pixel pos
 	private int getOppCol(Vec2D mouse0) {
-		int currCol = get((int)mouse0.x,(int) mouse0.y);
+		int currCol = get((int) mouse0.x, (int) mouse0.y);
 		TColor oppCol = TColor.newARGB(currCol);
 		oppCol = oppCol.getInverted();
 		int retCol = oppCol.toARGB();
