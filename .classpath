@@ -13,5 +13,6 @@
 	<classpathentry kind="lib" path="lib/hookedup_led.jar"/>
 	<classpathentry kind="lib" path="lib/hookedup_processing.jar"/>
 	<classpathentry kind="lib" path="lib/matrix_setup.jar"/>
+	<classpathentry kind="lib" path="lib/toxiclibscore.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
