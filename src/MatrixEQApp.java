@@ -32,7 +32,7 @@ public class MatrixEQApp extends BaseSwingFrameApp {
 	Timer timer;
 
 	//ExtraWindow win;
-	MyExtraWindow win;
+	DropsWindow win;
 
 	// --- music fun
 	EQLevels eq;
@@ -47,6 +47,7 @@ public class MatrixEQApp extends BaseSwingFrameApp {
 	int eqFallDelayAt = 12;
 	int musicTop = 400;
 
+	
 	float eqInputAdj = (float) .00;
 	int eqLeftOffset = 1;
 	int eqRightOffset = 3;
@@ -63,7 +64,12 @@ public class MatrixEQApp extends BaseSwingFrameApp {
 
 	void loadDefaultMatrix() {
 		String tmpResult = matrix
-				.loadMatrixFile("/Users/alistaircolling/default.xml");
+				//.loadMatrixFile("/Users/kndtech/Desktop/default.xml");
+				
+				.loadMatrixFile("c:/matrix/default.xml");
+		
+		
+		
 		if (tmpResult.equals("")) {
 			// System.out.println("File Loaded.");
 			return;
@@ -76,7 +82,7 @@ public class MatrixEQApp extends BaseSwingFrameApp {
 		loadDefaultMatrix();
 
 		// -- TO CONNECT --->>>
-		// matrix.connectToController();
+	    matrix.connectToController();
 
 		matrix.refresh();
 		matrix.emulatorDelay = 20;
@@ -130,7 +136,7 @@ public class MatrixEQApp extends BaseSwingFrameApp {
 
 	void setupExtraWindow() {
 		//win = new ExtraWindow(proc, "Matrix Setup", 0, 0, 500, 300);
-		win = new MyExtraWindow(proc, "Matrix Setup", 500, 300);
+		win = new DropsWindow(proc, "Matrix Setup", 500, 300);
 		//win.setVisible(false);
 		
 		matrixSetup();
@@ -291,7 +297,7 @@ public class MatrixEQApp extends BaseSwingFrameApp {
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
+	//	setContentPane(contentPane);
 		contentPane.setLayout(null);
 
 		JButton btnDemo = new JButton("Demo 1");
@@ -341,7 +347,7 @@ public class MatrixEQApp extends BaseSwingFrameApp {
 	void setupTimer() {
 		timer = new Timer();
 		timer.schedule(loadFromCanvasTask, 0, // initial delay
-				100);
+				50);
 	}
 
 	class LoadFromCanvasTask extends TimerTask {

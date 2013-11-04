@@ -23,6 +23,9 @@ public class MyExtraWindow extends ExtraWindow {
 	ColorGradient grad;
 	int trailLength = 20;
 	ArrayList<Vec2D> trail;
+	int currSketch = 0;
+	int lastSketch = -1;
+	int newSketch = -1;
 
 	public MyExtraWindow(PApplet theApplet, String theName, int theWidth,
 			int theHeight) {
@@ -38,6 +41,11 @@ public class MyExtraWindow extends ExtraWindow {
 	}
 
 	public void draw() {
+		if (currSketch!=lastSketch){
+			println("Is dif!");
+			
+		}
+		
 		if (cols.length > 0) {
 			noStroke();
 			fill(cols[0].toARGB());
